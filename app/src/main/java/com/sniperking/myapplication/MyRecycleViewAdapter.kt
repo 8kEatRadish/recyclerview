@@ -9,14 +9,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item.view.*
 
-class MyRecycleViewAdapter(context: Context) : RecyclerView.Adapter<MyViewHolder>() {
+class MyRecycleViewAdapter(context: Context, itemOnclickListener: itemOnclickListener) : RecyclerView.Adapter<MyViewHolder>() {
     private lateinit var _date : List<Int>
     private var flag: Boolean = true
     private val context = context
-
-    fun setData(data: Array<Int>, flag: Boolean){
+    private val _itemOnclickListener = itemOnclickListener
+    fun setData(data: Array<Int>){
         _date = data.toList()
-        this.flag = flag
+        this.flag = _date.size < 5
         notifyDataSetChanged()
     }
 
@@ -27,6 +27,10 @@ class MyRecycleViewAdapter(context: Context) : RecyclerView.Adapter<MyViewHolder
 
     override fun getItemCount(): Int {
         return _date.size
+    }
+
+    interface itemOnclickListener{
+        fun itemOnclick(position: Int)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -40,6 +44,7 @@ class MyRecycleViewAdapter(context: Context) : RecyclerView.Adapter<MyViewHolder
             holder.itemView.constraintlayout_item.layoutParams.width = context.resources.displayMetrics.widthPixels /3
         }
         holder.itemView.setOnClickListener {
+            _itemOnclickListener.itemOnclick(position)
             Log.d("suihw >> ","" + _date[position])
         }
     }
